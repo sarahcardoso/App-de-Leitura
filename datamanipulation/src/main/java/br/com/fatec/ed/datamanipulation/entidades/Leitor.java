@@ -6,7 +6,7 @@ public class Leitor {
 	private String nome;
 	private int idade;
 	private String genero;
-	
+
 	public Leitor() {
 	}
 
@@ -33,18 +33,18 @@ public class Leitor {
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "[genero: " + this.genero + " , " + " nome: " + this.nome + " , " + " idade: " + this.idade + " id: "  + this.id + "]";
+		return "[genero: " + this.genero + " , " + " nome: " + this.nome + " , " + " idade: " + this.idade + " , " + " id: "  + this.id + "]";
 	}
 }

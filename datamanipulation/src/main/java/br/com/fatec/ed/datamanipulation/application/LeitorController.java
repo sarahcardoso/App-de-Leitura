@@ -1,12 +1,6 @@
 package br.com.fatec.ed.datamanipulation.application;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,186 +9,201 @@ import br.com.fatec.ed.datamanipulation.entidades.Leitor;
 
 public class LeitorController {
 
-	static int id = 1;
-	static String caminho = "C:\\Users\\sarah\\Desktop\\leitor.txt";
-	public static void main(String[] args) throws IOException {
+    //TODO: ALTERAR O CAMINHO 
+    static int id = 1;
+    static String caminho = "C:\\Users\\Lenovo\\Documents\\vitoria_temp\\leitor.txt";
+    static List<Leitor> leitores = new ArrayList<>();
 
-//		criarArquivo("C:\\Users\\T721371\\Desktop\\FATEC\\ESTRUTURA_DE_DADOS", "leitor");
-//		lerArquivo("C:\\Users\\T721371\\Desktop\\FATEC\\ESTRUTURA_DE_DADOS\\leitor.txt");
-		criarArquivo("C:\\Users\\sarah\\Desktop\\jow", "leitor");
-		lerArquivo("C:\\Users\\sarah\\Desktop\\jow\\leitor.txt");
-		
-	}
+    public static void main(String[] args) throws IOException {
 
-	public static void criarArquivo(String path, String arq) throws IOException {
+        criarArquivo("C:\\Users\\Lenovo\\Documents\\vitoria_temp", "leitor");
+//        lerArquivo("C:\\Users\\Lenovo\\Documents\\vitoria_temp\\leitor.txt");
 
-		File dir = new File(path);
-		File arquivo = new File(path, arq + ".txt");
-		if (dir.exists()) {
-			boolean arquivoExiste = false;
-			if (arquivo.exists()) {
-				arquivoExiste = true;
-			}
-			String conteudo = gerarArquivoLeitor();
-			FileWriter fw = new FileWriter(arquivo, arquivoExiste);
-			PrintWriter pw = new PrintWriter(fw);
-			pw.write(conteudo);
-			pw.flush();
-			pw.close();
-			fw.close();
-		} else {
-			throw new IOException("Diretório Inválido");
-		}
-	}
+        atualizarLeitor(2, 2, "VIADNHO");
 
-	public static void lerArquivo(String absolutePath) throws IOException {
-		File arquivo = new File(absolutePath);
+    }
 
-		if (arquivo.exists()) {
+    public static void criarArquivo(String path, String arq) throws IOException {
 
-			FileInputStream fluxo = new FileInputStream(arquivo);
-			InputStreamReader leitor = new InputStreamReader(fluxo);
-			BufferedReader buffer = new BufferedReader(leitor);
-			String linha = buffer.readLine();
+        File dir = new File(path);
+        File arquivo = new File(path, arq + ".txt");
+        if (dir.exists()) {
+            boolean arquivoExiste = false;
+            if (arquivo.exists()) {
+                arquivoExiste = true;
+            }
+            String conteudo = gerarArquivoLeitor();
+            FileWriter fw = new FileWriter(arquivo, arquivoExiste);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.write(conteudo);
+            pw.flush();
+            pw.close();
+            fw.close();
+        } else {
+            throw new IOException("Diretório Inválido");
+        }
+    }
 
-			while (linha != null) {
-				System.out.println(linha);
-				linha = buffer.readLine();
-			}
+    public static void lerArquivo(String absolutePath) throws IOException {
+        File arquivo = new File(absolutePath);
 
-			buffer.close();
-			leitor.close();
-			fluxo.close();
-		} else {
-			throw new IOException("Arquivo não existe");
-		}
-	}
+        if (arquivo.exists()) {
 
-	public static String lerArquivoAtualizar(String absolutePath, int id) throws IOException {
-		File arquivo = new File(absolutePath);
+            FileInputStream fluxo = new FileInputStream(arquivo);
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+            String linha = buffer.readLine();
 
-		String linha2 = "";
-		if (arquivo.exists()) {
+            while (linha != null) {
+                System.out.println(linha);
+                linha = buffer.readLine();
+            }
 
-			FileInputStream fluxo = new FileInputStream(arquivo);
-			InputStreamReader leitor = new InputStreamReader(fluxo);
-			BufferedReader buffer = new BufferedReader(leitor);
-			String linha = buffer.readLine();
-			
-			while (linha.equals("id:" + id)) {
-				System.out.println(linha);
-				linha = buffer.readLine();
-				linha2 = linha;
-				String[] linhas = linha.split("\n");
-			}
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+        } else {
+            throw new IOException("Arquivo não existe");
+        }
+    }
 
-			buffer.close();
-			leitor.close();
-			fluxo.close();
-		} else {
-			throw new IOException("Arquivo inválido");
-		}
-		if(linha2 == null) {
-			return "linha não encontrada.";
-		}
-		return linha2;
-	}
+    public static String lerArquivoAtualizar(String absolutePath, int id) throws IOException {
+        File arquivo = new File(absolutePath);
 
-	public static String gerarArquivoLeitor() {
-		StringBuffer buffer = new StringBuffer();
-		String linha = "";
+        String linha2 = "";
+        if (arquivo.exists()) {
 
-		Scanner sc = new Scanner(System.in);
+            FileInputStream fluxo = new FileInputStream(arquivo);
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+            String linha = buffer.readLine();
 
-		for (int i = 0; i <= 1; i++) {
+            while (linha != null) {
+                if (linha.contains(", id: " + id)) {
+                    System.out.println(linha);
+                    linha2 = linha;
+                }
+                linha = buffer.readLine();
 
-			System.out.println("INSIRA O NOME DO LEITOR: ");
-			String nome = sc.next();
+            }
 
-			System.out.println("INSIRA O GENERO: ");
-			String genero = sc.next();
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+        } else {
+            throw new IOException("Arquivo inválido");
+        }
+        return linha2;
+    }
 
-			System.out.println("INSIRA A IDADE: ");
-			int idade = sc.nextInt();
+    public static String gerarArquivoLeitor() {
+        StringBuffer buffer = new StringBuffer();
+        String linha = "";
 
-			linha = alimentarListaLeitor(nome, genero, idade);
-			buffer.append(linha + "\r\n");
+        Scanner sc = new Scanner(System.in);
 
-		}
+        for (int i = 0; i <= 1; i++) {
 
-		sc.close();
-		return buffer.toString();
-	}
+            System.out.println("INSIRA O NOME DO LEITOR: ");
+            String nome = sc.next();
 
-	public static String alimentarListaLeitor(String nome, String genero, int idade) {
-		List<Leitor> leitores = new ArrayList<Leitor>();
+            System.out.println("INSIRA O GENERO: ");
+            String genero = sc.next();
 
-		Leitor leitor = new Leitor();
-		leitor.setId(id++);
-		leitor.setGenero(genero);
-		leitor.setIdade(idade);
-		leitor.setNome(nome);
-		leitores.add(leitor);
+            System.out.println("INSIRA A IDADE: ");
+            int idade = sc.nextInt();
 
-		String resposta = leitor.toString();
+            linha = alimentarListaLeitor(nome, genero, idade);
+            buffer.append(linha + "\r\n");
 
-		return resposta;
-	}
+        }
 
-	public static void atualizarLeitor(int id, int opcao, String alteracao) {
-		List<Leitor> leitores = new ArrayList<Leitor>();
-		Leitor leitor = new Leitor();
-		
-		try {
-			//testar
-			String oldLine = lerArquivoAtualizar(caminho, id);
-			String newLine = "";
-		for (int i = 0; i < leitores.size(); i++) {
-			if (leitores.get(i).getId() == id) {
-				switch (opcao) {
-				case 1:
-					leitor.setGenero(alteracao);
-					newLine = leitor.toString();
-					OverwriteLine(oldLine, newLine);
-					break;
+        sc.close();
+        return buffer.toString();
+    }
 
-				case 2:
-					leitor.setNome(alteracao);
-					newLine = leitor.toString();
-					OverwriteLine(oldLine, newLine);
-					break;
+    public static String alimentarListaLeitor(String nome, String genero, int idade) {
 
-				case 3:
-					leitor.setIdade(Integer.parseInt(alteracao));
-					newLine = leitor.toString();
-					OverwriteLine(oldLine, newLine);
-					break;
+        Leitor leitor = new Leitor();
+        leitor.setId(id++);
+        leitor.setGenero(genero);
+        leitor.setIdade(idade);
+        leitor.setNome(nome);
+        leitores.add(leitor);
 
-				default:
-					break;
-				}
-			}
-		}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void OverwriteLine(String oldLine, String newLine) throws IOException {
-		File arquivo = new File(caminho);
-		StringBuffer buffer = new StringBuffer();
-	    String fileContents = buffer.toString();
-	
-	    System.out.println("antes de alterar: " + oldLine);
-	    fileContents = fileContents.replace(oldLine, newLine);
-	
-	    FileWriter writer = new FileWriter(arquivo);
-	    System.out.println("");
-	    System.out.println("depois de alterar: "+ fileContents);
-	    
-	    writer.append(fileContents);
-	    writer.flush();
-	    writer.close();
-		}
+        String resposta = leitor.toString();
+
+        return resposta;
+    }
+
+    public static void atualizarLeitor(int id, int opcao, String alteracao) {
+
+        Leitor leitor = new Leitor();
+
+        try {
+            // testar
+            String oldLine = lerArquivoAtualizar(caminho, id);
+
+            for (int i = 0; i < leitores.size(); i++) {
+
+
+                if (leitores.get(i).getId() == id) {
+                    switch (opcao) {
+                        case 1:
+                            leitores.get(i).setGenero(alteracao);
+
+                            String newLine = leitores.get(i).toString();
+                            OverwriteLine(oldLine, newLine);
+                            break;
+
+                        case 2:
+                            leitores.get(i).setNome(alteracao);
+
+                            newLine = leitores.get(i).toString();
+                            OverwriteLine(oldLine, newLine);
+                            break;
+
+                        case 3:
+                            leitores.get(i).setIdade(Integer.parseInt(alteracao));
+                            newLine = leitores.get(i).toString();
+                            OverwriteLine(oldLine, newLine);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("error");
+        }
+    }
+
+    public static void OverwriteLine(String oldLine, String newLine) throws IOException {
+        String filePath = "C:\\Users\\Lenovo\\Documents\\vitoria_temp\\leitor.txt";
+        Scanner sc = new Scanner(new File(filePath));
+        StringBuffer buffer = new StringBuffer();
+        while (sc.hasNextLine()) {
+            buffer.append(sc.nextLine() + System.lineSeparator());
+        }
+        String fileContents = buffer.toString();
+        System.out.println("antes de alterar: " + fileContents);
+
+        sc.close();
+
+
+        fileContents = fileContents.replace(oldLine, newLine);
+
+        FileWriter writer = new FileWriter(filePath);
+        System.out.println("");
+        System.out.println("depois de alterar: " + fileContents);
+
+        writer.append(fileContents);
+        writer.flush();
+        writer.close();
+    }
 
 }
+
