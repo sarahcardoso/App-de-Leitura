@@ -29,7 +29,7 @@ public class LivroController {
             livro.close();
             fluxo.close();
         } else {
-            throw new IOException("Arquivo n„o existe");
+            throw new IOException("Arquivo n√£o existe");
         }
     }
 
