@@ -6,268 +6,272 @@ import java.util.List;
 import java.util.Scanner;
 
 import br.com.fatec.ed.datamanipulation.entidades.Leitor;
+import org.apache.log4j.Logger;
 
 public class LeitorController {
 
-	// TODO: ALTERAR O CAMINHO!!!
-	static int id = 1;
-	static String caminho = "C:\\Users\\sarah\\Desktop\\estrutura-dados\\leitor.txt";
-	static List<Leitor> leitores = new ArrayList<>();
+    // TODO: ALTERAR O CAMINHO!!!
+    static int id = 1;
+    static String caminho = "C:\\Users\\sarah\\Desktop\\estrutura-dados\\leitor.txt";
+    static List<Leitor> leitores = new ArrayList<>();
+    private static Logger LOGGER = Logger.getLogger(LeitorController.class);
 
-//main temporario
-	public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
-		criarArquivo("C:\\Users\\sarah\\Desktop\\estrutura-dados", "leitor");
-		lerArquivo(caminho);
-		// atualizarLeitor(2, 2, "Teste");
-		excluirLeitor(2);
+        criarArquivo("C:\\Users\\sarah\\Desktop\\estrutura-dados", "leitor");
+        lerArquivo(caminho);
+        atualizarLeitor(2, 2, "Teste");
+        excluirLeitor(2);
 
-	}
+    }
 
-	public static void criarArquivo(String path, String arq) throws IOException {
+    public static void criarArquivo(String path, String arq) throws IOException {
 
-		File dir = new File(path);
-		File arquivo = new File(path, arq + ".txt");
-		if (dir.exists()) {
-			boolean arquivoExiste = false;
-			if (arquivo.exists()) {
-				arquivoExiste = true;
-			}
-			String conteudo = gerarArquivoLeitor();
-			FileWriter fw = new FileWriter(arquivo, arquivoExiste);
-			PrintWriter pw = new PrintWriter(fw);
-			pw.write(conteudo);
-			pw.flush();
-			pw.close();
-			fw.close();
-		} else {
-			throw new IOException("Diretório Inválido");
-		}
-	}
+        File dir = new File(path);
+        File arquivo = new File(path, arq + ".txt");
+        if (dir.exists()) {
+            boolean arquivoExiste = false;
+            if (arquivo.exists()) {
+                arquivoExiste = true;
+            }
+            String conteudo = gerarArquivoLeitor();
+            FileWriter fw = new FileWriter(arquivo, arquivoExiste);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.write(conteudo);
+            pw.flush();
+            pw.close();
+            fw.close();
+        } else {
+            throw new IOException("Diretório Inválido");
+        }
 
-	public static void lerArquivo(String absolutePath) throws IOException {
-		File arquivo = new File(absolutePath);
+        LOGGER.info("LEITOR REGISTRADO COM SUCESSO");
+    }
 
-		if (arquivo.exists()) {
+    public static void lerArquivo(String absolutePath) throws IOException {
+        File arquivo = new File(absolutePath);
 
-			FileInputStream fluxo = new FileInputStream(arquivo);
-			InputStreamReader leitor = new InputStreamReader(fluxo);
-			BufferedReader buffer = new BufferedReader(leitor);
-			String linha = buffer.readLine();
+        if (arquivo.exists()) {
 
-			while (linha != null) {
-				System.out.println(linha);
-				linha = buffer.readLine();
-			}
+            LOGGER.info("INFORMACOES ENCONTRADAS NO ARQUIVO");
 
-			buffer.close();
-			leitor.close();
-			fluxo.close();
-		} else {
-			throw new IOException("Arquivo não existe");
-		}
-	}
+            FileInputStream fluxo = new FileInputStream(arquivo);
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+            String linha = buffer.readLine();
 
-	public static String lerArquivoAtualizar(String absolutePath, int id) throws IOException {
-		File arquivo = new File(absolutePath);
+            while (linha != null) {
+                System.out.println(linha);
+                linha = buffer.readLine();
+            }
 
-		String linha2 = "";
-		if (arquivo.exists()) {
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+        } else {
+            throw new IOException("Arquivo não existe");
+        }
+    }
 
-			FileInputStream fluxo = new FileInputStream(arquivo);
-			InputStreamReader leitor = new InputStreamReader(fluxo);
-			BufferedReader buffer = new BufferedReader(leitor);
-			String linha = buffer.readLine();
+    public static String lerArquivo(String absolutePath, int id) throws IOException {
+        File arquivo = new File(absolutePath);
 
-			while (linha != null) {
-				if (linha.contains(",  id: " + id)) {
-					System.out.println(linha);
-					linha2 = linha;
-				}
-				linha = buffer.readLine();
+        String linha2 = "";
+        if (arquivo.exists()) {
 
-			}
+            FileInputStream fluxo = new FileInputStream(arquivo);
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+            String linha = buffer.readLine();
 
-			buffer.close();
-			leitor.close();
-			fluxo.close();
-		} else {
-			throw new IOException("Arquivo inválido");
-		}
-		return linha2;
-	}
+            while (linha != null) {
+                if (linha.contains(",  id: " + id)) {
+                    System.out.println(linha);
+                    linha2 = linha;
+                }
+                linha = buffer.readLine();
 
-	public static String gerarArquivoLeitor() {
-		StringBuffer buffer = new StringBuffer();
-		String linha = "";
+            }
 
-		Scanner sc = new Scanner(System.in);
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+        } else {
+            throw new IOException("Arquivo inválido");
+        }
+        return linha2;
+    }
 
-		for (int i = 0; i <= 3; i++) {
+    public static String gerarArquivoLeitor() {
+        StringBuffer buffer = new StringBuffer();
+        String linha = "";
 
-			System.out.println("INSIRA O NOME DO LEITOR: ");
-			String nome = sc.next();
+        Scanner sc = new Scanner(System.in);
 
-			System.out.println("INSIRA O GENERO: ");
-			String genero = sc.next();
+        for (int i = 0; i <= 3; i++) {
 
-			System.out.println("INSIRA A IDADE: ");
-			int idade = sc.nextInt();
+            System.out.println("INSIRA O NOME DO LEITOR: ");
+            String nome = sc.next();
 
-			linha = alimentarListaLeitor(nome, genero, idade);
-			buffer.append(linha + "\r\n");
+            System.out.println("INSIRA O GENERO: ");
+            String genero = sc.next();
 
-		}
+            System.out.println("INSIRA A IDADE: ");
+            int idade = sc.nextInt();
 
-		sc.close();
-		return buffer.toString();
-	}
+            linha = gerarLeitor(nome, genero, idade);
+            buffer.append(linha + "\r\n");
 
-	public static String alimentarListaLeitor(String nome, String genero, int idade) {
+        }
 
-		Leitor leitor = new Leitor();
-		leitor.setId(id++);
-		leitor.setGenero(genero);
-		leitor.setIdade(idade);
-		leitor.setNome(nome);
-		leitores.add(leitor);
+        sc.close();
+        return buffer.toString();
+    }
 
-		String resposta = leitor.toString();
+    public static String gerarLeitor(String nome, String genero, int idade) {
 
-		return resposta;
-	}
+        Leitor leitor = new Leitor();
+        leitor.setId(id++);
+        leitor.setGenero(genero);
+        leitor.setIdade(idade);
+        leitor.setNome(nome);
+        leitores.add(leitor);
 
-	public static void atualizarLeitor(int id, int opcao, String alteracao) {
+        String resposta = leitor.toString();
 
-		try {
+        return resposta;
+    }
 
-			String oldLine = lerArquivoAtualizar(caminho, id);
+    public static void atualizarLeitor(int id, int opcao, String alteracao) {
 
-			for (int i = 0; i < leitores.size(); i++) {
+        try {
 
-				if (leitores.get(i).getId() == id) {
-					switch (opcao) {
-					case 1:
-						leitores.get(i).setGenero(alteracao);
+            String oldLine = lerArquivo(caminho, id);
 
-						String newLine = leitores.get(i).toString();
-						OverwriteLine(oldLine, newLine);
-						break;
+            for (int i = 0; i < leitores.size(); i++) {
 
-					case 2:
-						leitores.get(i).setNome(alteracao);
+                if (leitores.get(i).getId() == id) {
+                    switch (opcao) {
+                        case 1:
+                            leitores.get(i).setGenero(alteracao);
 
-						newLine = leitores.get(i).toString();
-						OverwriteLine(oldLine, newLine);
-						break;
+                            String newLine = leitores.get(i).toString();
+                            OverwriteLine(oldLine, newLine);
+                            break;
 
-					case 3:
-						leitores.get(i).setIdade(Integer.parseInt(alteracao));
-						newLine = leitores.get(i).toString();
-						OverwriteLine(oldLine, newLine);
-						break;
+                        case 2:
+                            leitores.get(i).setNome(alteracao);
 
-					default:
-						break;
-					}
-				}
-			}
+                            newLine = leitores.get(i).toString();
+                            OverwriteLine(oldLine, newLine);
+                            break;
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("error");
-		}
-	}
+                        case 3:
+                            leitores.get(i).setIdade(Integer.parseInt(alteracao));
+                            newLine = leitores.get(i).toString();
+                            OverwriteLine(oldLine, newLine);
+                            break;
 
-	public static void OverwriteLine(String oldLine, String newLine) throws IOException {
-		String filePath = caminho;
-		Scanner sc = new Scanner(new File(filePath));
-		StringBuffer buffer = new StringBuffer();
-		while (sc.hasNextLine()) {
-			buffer.append(sc.nextLine() + System.lineSeparator());
-		}
-		String fileContents = buffer.toString();
-		System.out.println("antes de alterar: " + fileContents);
+                        default:
+                            break;
+                    }
+                }
+            }
 
-		sc.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.error("ERROR");
+        }
+    }
 
-		fileContents = fileContents.replace(oldLine, newLine);
+    public static void OverwriteLine(String oldLine, String newLine) throws IOException {
+        String filePath = caminho;
+        Scanner sc = new Scanner(new File(filePath));
+        StringBuffer buffer = new StringBuffer();
+        while (sc.hasNextLine()) {
+            buffer.append(sc.nextLine() + System.lineSeparator());
+        }
+        String fileContents = buffer.toString();
+        LOGGER.info("ANTES DE ALTERAR: " + "[ " + fileContents + " ]");
 
-		FileWriter writer = new FileWriter(filePath);
-		System.out.println("");
-		System.out.println("depois de alterar: " + fileContents);
+        sc.close();
 
-		writer.append(fileContents);
-		writer.flush();
-		writer.close();
-	}
+        fileContents = fileContents.replace(oldLine, newLine);
 
-	public static void excluirLinha(String lineToRemove) {
+        FileWriter writer = new FileWriter(filePath);
+        LOGGER.info("DEPOIS DE ALTERAR: " + "[ " + fileContents + " ]");
 
-		try {
+        writer.append(fileContents);
+        writer.flush();
+        writer.close();
+    }
 
-			File inFile = new File(caminho);
+    public static void excluirLinha(String lineToRemove) {
 
-			if (!inFile.isFile()) {
-				System.out.println("Arquivo informado não existe");
-				return;
-			}
+        try {
 
-			// Construct the new file that will later be renamed to the original filename.
-			File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
+            File inFile = new File(caminho);
 
-			BufferedReader br = new BufferedReader(new FileReader(caminho));
-			PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+            if (!inFile.isFile()) {
+                System.out.println("Arquivo informado não existe");
+                return;
+            }
 
-			String line = null;
+            // Construct the new file that will later be renamed to the original filename.
+            File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
 
-			// Read from the original file and write to the new
-			// unless content matches data to be removed.
-			while ((line = br.readLine()) != null) {
+            BufferedReader br = new BufferedReader(new FileReader(caminho));
+            PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
 
-				if (!line.trim().equals(lineToRemove)) {
+            String line = null;
 
-					pw.println(line);
-					pw.flush();
-				}
-			}
-			pw.close();
-			br.close();
+            // Read from the original file and write to the new
+            // unless content matches data to be removed.
+            while ((line = br.readLine()) != null) {
 
-			// Delete the original file
-			if (!inFile.delete()) {
-				System.out.println("Não foi possível deletar o arquivo");
-				return;
-			}
+                if (!line.trim().equals(lineToRemove)) {
 
-			// Rename the new file to the filename the original file had.
-			if (!tempFile.renameTo(inFile))
-				System.out.println("Não foi possível renomear o arquivo");
+                    pw.println(line);
+                    pw.flush();
+                }
+            }
+            pw.close();
+            br.close();
 
-		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+            // Delete the original file
+            if (!inFile.delete()) {
+                System.out.println("Não foi possível deletar o arquivo");
+                return;
+            }
 
-	}
+            // Rename the new file to the filename the original file had.
+            if (!tempFile.renameTo(inFile))
+                System.out.println("Não foi possível renomear o arquivo");
 
-	private static void excluirLeitor(int id) {
-		try {
-			String linhaExcluir = lerArquivoAtualizar(caminho, id);
-			for (int i = 0; i < leitores.size(); i++) {
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
-				if (leitores.get(i).getId() == id) {
-					leitores.remove(i);
-					System.out.println(leitores.toString());
-					excluirLinha(linhaExcluir);
-				}
+    }
 
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    private static void excluirLeitor(int id) {
+        try {
+            String linhaExcluir = lerArquivo(caminho, id);
+            for (int i = 0; i < leitores.size(); i++) {
 
-	}
+                if (leitores.get(i).getId() == id) {
+                    leitores.remove(i);
+                    System.out.println(leitores.toString());
+                    excluirLinha(linhaExcluir);
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
