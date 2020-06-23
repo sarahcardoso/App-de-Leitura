@@ -1,41 +1,22 @@
 package br.com.fatec.ed.datamanipulation.entidades;
 
-import br.com.fatec.ed.datamanipulation.enumerators.TipoMeta;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Meta {
-	
-	private String quantidadePaginas;
-	private TipoMeta tipo;
-	private Livro livro;
 
-	public Meta() {
-	}
+    private int quantidadePaginas;
+    private String tipo;
+    private String livro;
+    private int id;
 
-
-	public String getQuantidadePaginas() {
-		return quantidadePaginas;
-	}
-
-
-	public void setQuantidadePaginas(String quantidadePaginas) {
-		this.quantidadePaginas = quantidadePaginas;
-	}
-
-
-	public TipoMeta getTipo() {
-		return tipo;
-	}
-
-
-	public void setTipo(TipoMeta tipo) {
-		this.tipo = tipo;
-	}
-	
-	public Livro getLivro() {
-		return livro;
-	}
-	
-	public void setLivro(Livro livro) {
-		this.livro = livro;
-	}
+    @Override
+    public String toString() {
+        return "paginas: " + this.quantidadePaginas + ", " + " meta: " + this.tipo + ", " + " livro: " + this.livro + ", " +
+                " id: " + this.id;
+    }
 }
