@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Livro {
-
+	private int ISBN;
     private String titulo;
     private String autor;
     private String genero;
