@@ -19,7 +19,7 @@ public class LeituraController {
         LOGGER.info("**********INICIANDO APLICACAO*************");
 
         criarArquivo("C:\\Users\\Lenovo\\Documents\\vitoria_temp", "leitura");
-//        personalizarLeitura(1, "LE");
+        personalizarLeitura(1, "LE");
         excluirLeitura();
     }
 
@@ -244,7 +244,6 @@ public class LeituraController {
         File arquivo = new File(absolutePath);
 
         String registroExcluido = "";
-        int contador = 0;
         if (arquivo.exists()) {
 
             LOGGER.info("INFORMACOES ENCONTRADAS NO ARQUIVO");
@@ -257,11 +256,6 @@ public class LeituraController {
 
             while (linha != null) {
                 registroExcluido = linha;
-
-                if (contador == 1) {
-                    return registroExcluido;
-                }
-
                 linha = buffer.readLine();
             }
 
