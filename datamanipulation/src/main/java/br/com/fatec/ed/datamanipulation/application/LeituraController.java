@@ -6,23 +6,21 @@ import br.com.fatec.ed.datamanipulation.enumerators.TipoMeta;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class LeituraController {
 
     private static int id = 1;
     private static Logger LOGGER = Logger.getLogger(LeituraController.class);
     static String caminho = "C:\\Users\\Lenovo\\Documents\\vitoria_temp\\leitura.txt";
-    static List<Leitura> leituras = new ArrayList<>();
+    static Queue<Leitura> leituras = new LinkedList<>();
 
     public static void main(String[] args) throws IOException {
         LOGGER.info("**********INICIANDO APLICACAO*************");
 
         criarArquivo("C:\\Users\\Lenovo\\Documents\\vitoria_temp", "leitura");
-        personalizarLeitura(1, "L");
-        excluirLeitura(2);
+//        personalizarLeitura(1, "LE");
+        excluirLeitura();
     }
 
 
@@ -46,7 +44,7 @@ public class LeituraController {
             throw new IOException("Diretório Inválido");
         }
 
-        LOGGER.info("META REGISTRADA COM SUCESSO");
+        LOGGER.info("LEITURA REGISTRADA COM SUCESSO");
     }
 
     public static void lerArquivo(String absolutePath) throws IOException {
@@ -86,15 +84,8 @@ public class LeituraController {
             InputStreamReader leitor = new InputStreamReader(fluxo);
             BufferedReader buffer = new BufferedReader(leitor);
             String linha = buffer.readLine();
+            linha2 = linha;
 
-            while (linha != null) {
-                if (linha.contains(",  id: " + id)) {
-                    System.out.println(linha);
-                    linha2 = linha;
-                }
-                linha = buffer.readLine();
-
-            }
 
             buffer.close();
             leitor.close();
@@ -115,6 +106,7 @@ public class LeituraController {
         leitura.setQuantidadeDePaginas(paginas);
         leituras.add(leitura);
 
+
         String resposta = leitura.toString();
 
         return resposta;
@@ -130,9 +122,11 @@ public class LeituraController {
 
             System.out.println("NOME DO LEITOR: ");
             String leitor = sc.next();
+            sc.nextLine();
 
             System.out.println("INFORME O LIVRO QUE ESTA SENDO LIDO?: ");
             String livro = sc.next();
+            sc.nextLine();
 
             System.out.println("QUAL E STATUS DA LEITURA? ");
             String status = sc.next();
@@ -158,13 +152,12 @@ public class LeituraController {
             String oldLine = lerArquivo(caminho, id);
 
             for (int i = 0; i < leituras.size(); i++) {
-
-                if (leituras.get(i).getId() == id) {
-                    leituras.get(i).setStatus(StatusLeitura.parse(alteracao));
-                    String newLine = leituras.get(i).toString();
+                if (leituras.peek().getId() == id) {
+                    leituras.peek().setStatus(StatusLeitura.parse(alteracao));
+                    String newLine = leituras.peek().toString();
                     OverwriteLine(oldLine, newLine);
 
-                    LOGGER.info("ID DA META PERSONALIZADA " + leituras.get(i).getId());
+                    LOGGER.info("ID DA META PERSONALIZADA " + leituras.peek().getId());
                 }
             }
 
@@ -247,21 +240,53 @@ public class LeituraController {
 
     }
 
-    private static void excluirLeitura(int id) {
-        try {
-            String linhaExcluir = lerArquivo(caminho, id);
-            for (int i = 0; i < leituras.size(); i++) {
+    public static String recuperarRegistro(String absolutePath) throws IOException {
+        File arquivo = new File(absolutePath);
 
-                if (leituras.get(i).getId() == id) {
-                    LOGGER.info("REGISTRO EXCLUIDO: " + leituras.get(i).toString());
-                    leituras.remove(i);
-                    excluirLinha(linhaExcluir);
+        String registroExcluido = "";
+        int contador = 0;
+        if (arquivo.exists()) {
+
+            LOGGER.info("INFORMACOES ENCONTRADAS NO ARQUIVO");
+
+            FileInputStream fluxo = new FileInputStream(arquivo);
+            InputStreamReader leitor = new InputStreamReader(fluxo);
+            BufferedReader buffer = new BufferedReader(leitor);
+            String linha = buffer.readLine();
+
+
+            while (linha != null) {
+                registroExcluido = linha;
+
+                if (contador == 1) {
+                    return registroExcluido;
                 }
 
+                linha = buffer.readLine();
             }
+
+
+            buffer.close();
+            leitor.close();
+            fluxo.close();
+        } else {
+            throw new IOException("Arquivo não existe");
+        }
+
+        return registroExcluido;
+    }
+
+    private static boolean excluirLeitura() {
+        try {
+            String linhaExcluir = recuperarRegistro(caminho);
+            LOGGER.info("REGISTRO EXCLUIDO: " + linhaExcluir);
+            leituras.remove();
+            excluirLinha(linhaExcluir);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return true;
     }
 }
