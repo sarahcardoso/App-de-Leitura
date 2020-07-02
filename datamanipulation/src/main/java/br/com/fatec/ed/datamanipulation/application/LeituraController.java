@@ -14,16 +14,8 @@ public class LeituraController {
 
     private static int id = 1;
     private static Logger LOGGER = Logger.getLogger(LeituraController.class);
-    static String caminho = "C:\\Users\\Lenovo\\Documents\\vitoria_temp\\leitura.txt";
+    static String caminho = "C:\\Users\\sarah\\Desktop\\ed\\leitura.txt";
     static List<Leitura> leituras = new ArrayList<>();
-
-    public static void main(String[] args) throws IOException {
-        LOGGER.info("**********INICIANDO APLICACAO*************");
-
-        criarArquivo("C:\\Users\\Lenovo\\Documents\\vitoria_temp", "leitura");
-        personalizarLeitura(1, "L");
-        excluirLeitura(2);
-    }
 
 
     public static void criarArquivo(String path, String arq) throws IOException {
@@ -130,13 +122,16 @@ public class LeituraController {
 
             System.out.println("NOME DO LEITOR: ");
             String leitor = sc.next();
+            sc.nextLine();
 
             System.out.println("INFORME O LIVRO QUE ESTA SENDO LIDO?: ");
             String livro = sc.next();
-
+            sc.nextLine();
+            
             System.out.println("QUAL E STATUS DA LEITURA? ");
             String status = sc.next();
-
+            
+            
             System.out.println("QUAL E O TIPO DE META DESSA LEITURA? ");
             String meta = sc.next();
 
@@ -247,7 +242,7 @@ public class LeituraController {
 
     }
 
-    private static void excluirLeitura(int id) {
+    public static void excluirLeitura(int id) {
         try {
             String linhaExcluir = lerArquivo(caminho, id);
             for (int i = 0; i < leituras.size(); i++) {

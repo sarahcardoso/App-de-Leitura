@@ -1,29 +1,32 @@
 package br.com.fatec.ed.datamanipulation.application;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
-import br.com.fatec.ed.datamanipulation.entidades.Leitor;
 import org.apache.log4j.Logger;
+
+import br.com.fatec.ed.datamanipulation.entidades.Leitor;
 
 public class LeitorController {
 
-    // TODO: ALTERAR O CAMINHO!!!
+ 
     static int id = 1;
-    static String caminho = "C:\\Users\\sarah\\Desktop\\estrutura-dados\\leitor.txt";
+    static String caminho = "C:\\Users\\sarah\\Desktop\\ed\\leitor.txt";
     static List<Leitor> leitores = new ArrayList<>();
     private static Logger LOGGER = Logger.getLogger(LeitorController.class);
-
-    public static void main(String[] args) throws IOException {
-
-        criarArquivo("C:\\Users\\sarah\\Desktop\\estrutura-dados", "leitor");
-        lerArquivo(caminho);
-        atualizarLeitor(2, 2, "Teste");
-        excluirLeitor(2);
-
-    }
+    static Collection leitoresHash = new HashSet<>();
 
     public static void criarArquivo(String path, String arq) throws IOException {
 
@@ -103,30 +106,34 @@ public class LeitorController {
     }
 
     public static String gerarArquivoLeitor() {
-        StringBuffer buffer = new StringBuffer();
-        String linha = "";
+		StringBuffer buffer = new StringBuffer();
+		String linha = "";
 
-        Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 
-        for (int i = 0; i <= 3; i++) {
+		for (int i = 0; i <= 3; i++) {
 
-            System.out.println("INSIRA O NOME DO LEITOR: ");
-            String nome = sc.next();
+			System.out.println("INSIRA O NOME DO LEITOR: ");
+			String nome = sc.next();
 
-            System.out.println("INSIRA O GENERO: ");
-            String genero = sc.next();
+			System.out.println("INSIRA O GENERO: ");
+			String genero = sc.next();
 
-            System.out.println("INSIRA A IDADE: ");
-            int idade = sc.nextInt();
+			System.out.println("INSIRA A IDADE: ");
+			int idade = sc.nextInt();
+			if (leitoresHash.contains(nome)) {
+				System.err.println("Esse leitor já foi adicionado.");
+			} else {
+				linha = gerarLeitor(nome, genero, idade);
+				buffer.append(linha + "\r\n");
+				leitoresHash.add(nome);
+			}
 
-            linha = gerarLeitor(nome, genero, idade);
-            buffer.append(linha + "\r\n");
+		}
 
-        }
-
-        sc.close();
-        return buffer.toString();
-    }
+		sc.close();
+		return buffer.toString();
+	}
 
     public static String gerarLeitor(String nome, String genero, int idade) {
 
@@ -256,7 +263,7 @@ public class LeitorController {
 
     }
 
-    private static void excluirLeitor(int id) {
+    public static void excluirLeitor(int id) {
         try {
             String linhaExcluir = lerArquivo(caminho, id);
             for (int i = 0; i < leitores.size(); i++) {

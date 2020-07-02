@@ -14,5 +14,10 @@ public class Livro {
     private String genero;
     private int paginas;
 
+    public String toString() {
+
+		return ",Titulo: " + this.titulo + ", " + "Autor: " + this.autor + ", " + "Genero: " + this.genero + ", "
+				+ "Pagina: " + this.paginas + ", " + "ISBN: " + this.ISBN;
+	}
 
 }
